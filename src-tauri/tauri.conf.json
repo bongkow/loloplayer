@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "tauri-apphls-maker",
+  "productName": "loloplayer",
   "version": "0.1.1",
-  "identifier": "com.skim.tauri-apphls-maker",
+  "identifier": "com.skim.loloplayer",
   "build": {
     "beforeDevCommand": "yarn dev",
     "devUrl": "http://localhost:1420",
@@ -13,7 +13,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "HLS Maker",
+        "title": "loloplayer",
         "width": 800,
         "height": 600,
         "decorations": false,
