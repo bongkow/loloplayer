@@ -20,7 +20,7 @@ export function AboutThisAppButton() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-64 bg-white/95 backdrop-blur-2xl border-zinc-200 text-zinc-800 shadow-2xl rounded-[2px] mt-2 p-4">
                     <div className="flex flex-col gap-1 items-center justify-center pb-2">
-                        <h1 className="font-mono font-bold text-lg tracking-wider text-black">HLS MAKER</h1>
+                        <h1 className="font-mono font-bold text-lg tracking-wider text-black">LOLOPLAYER</h1>
                         <span className="text-[10px] font-mono text-zinc-500 bg-zinc-100 px-2 py-0.5 rounded-full">v0.1.1</span>
                     </div>
 

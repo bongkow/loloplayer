@@ -101,7 +101,7 @@ function HlsMakerApplication() {
                   <div className="absolute -inset-4 bg-zinc-800/20 rounded-full blur-3xl group-hover:bg-zinc-500/10 transition-colors duration-500" />
                   <img
                     src={applicationLogoImage}
-                    alt="HLS Maker Logo"
+                    alt="loloplayer Logo"
                     className="w-40 h-40 object-contain relative transition-transform duration-500 group-hover:scale-105"
                     style={{ filter: "drop-shadow(0 0 20px rgba(0,0,0,0.5))" }}
                   />
