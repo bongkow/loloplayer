@@ -15,6 +15,8 @@ import { HlsConverterFooter } from "./components/ui/Footer/HlsConverterFooter";
 import { AppModeSelector } from "./components/ui/Header/AppModeSelector";
 import { WindowControls } from "./components/ui/Header/WindowControls";
 import { useRecordPlaybackHistory } from "./hooks/useVideoPlaybackHistory";
+import { useShortcutStore } from "./lib/useShortcutStore";
+import { useEffect } from "react";
 
 /**
  * Main Application Component for HLS Maker.
@@ -39,6 +41,15 @@ function HlsMakerApplication() {
 
   // Enable playback history recording
   useRecordPlaybackHistory();
+
+  // Global Shortcut Listener
+  useEffect(() => {
+    const handleGlobalKeyDown = useShortcutStore.getState().handleKeyDown;
+    window.addEventListener("keydown", handleGlobalKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleGlobalKeyDown);
+    };
+  }, []);
 
   const { loadVideoFileIntoPlayer } = useMpvVideoPlaybackControl();
 
