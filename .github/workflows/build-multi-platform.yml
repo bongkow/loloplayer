@@ -1,0 +1,100 @@
+name: Build Multi-Platform
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            ffmpeg_url: "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip"
+            ffmpeg_name: "ffmpeg.exe"
+            
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            ffmpeg_url: "https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
+            ffmpeg_name: "ffmpeg"
+            
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            ffmpeg_url: "https://evermeet.cx/ffmpeg/ffmpeg-6.1.zip"
+            ffmpeg_name: "ffmpeg"
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Install dependencies (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev \
+            build-essential \
+            curl \
+            wget \
+            file \
+            libxdo-dev \
+            libssl-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev \
+            libmpv-dev
+
+      - name: Install dependencies (macOS)
+        if: matrix.os == 'macos-latest'
+        run: |
+          brew install mpv
+
+      - name: Install Yarn dependencies
+        run: yarn install
+
+      - name: Download FFmpeg
+        shell: bash
+        run: |
+          mkdir -p temp_ffmpeg
+          cd temp_ffmpeg
+          
+          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+            curl -L -o ffmpeg.zip "${{ matrix.ffmpeg_url }}"
+            unzip ffmpeg.zip
+            mv ffmpeg-*/bin/ffmpeg.exe ../src-tauri/binaries/ffmpeg-${{ matrix.target }}.exe
+          elif [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
+            wget "${{ matrix.ffmpeg_url }}" -O ffmpeg.tar.xz
+            tar xf ffmpeg.tar.xz
+            mv ffmpeg-*/ffmpeg ../src-tauri/binaries/ffmpeg-${{ matrix.target }}
+            chmod +x ../src-tauri/binaries/ffmpeg-${{ matrix.target }}
+          elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
+            curl -L -o ffmpeg.zip "${{ matrix.ffmpeg_url }}"
+            unzip ffmpeg.zip
+            mv ffmpeg ../src-tauri/binaries/ffmpeg-${{ matrix.target }}
+            chmod +x ../src-tauri/binaries/ffmpeg-${{ matrix.target }}
+          fi
+
+      - name: Build Tauri app
+        run: yarn tauri build --target ${{ matrix.target }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-${{ matrix.os }}
+          path: |
+            src-tauri/target/${{ matrix.target }}/release/bundle/**/*
+          retention-days: 5
