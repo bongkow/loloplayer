@@ -156,7 +156,7 @@ function HlsMakerApplication() {
       </main>
 
       {/* Unified Control & Status Footer */}
-      <footer id="Footer" className={`z-[999] solid-red-footer flex items-center justify-between px-4 border-t border-red-800 select-none min-h-[56px] py-1 transition-opacity duration-500 ${isUserActive ? 'opacity-100' : 'opacity-0'}`}>
+      <footer id="Footer" className={`z-[999] solid-red-footer flex items-center justify-between px-4 border-t border-red-800 select-none min-h-[56px] py-1 transition-opacity duration-500 ${isUserActive ? 'opacity-50' : 'opacity-0'}`}>
         {/* Left: System Status */}
         <LoadStatus isProcessingHls={isProcessingHls} statusMessage={statusMessage} />
 
