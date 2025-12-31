@@ -60,14 +60,24 @@ yarn tauri build
 
 For detailed platform-specific setup instructions, including how to obtain and configure FFmpeg binaries for Linux and macOS, please see [PLATFORM_SETUP.md](PLATFORM_SETUP.md).
 
-## Features
+## Application Modes
 
-- 🎥 Native video playback using libmpv
-- 📹 Support for multiple video formats (MP4, MKV, AVI, etc.)
-- 🔄 HLS generation from video files
-- 🎨 VLC-inspired classic UI
-- ⚡ Fast and lightweight
-- ⏯️ Smart Playback Resume - Remembers where you left off
+### 🎥 Player
+Experience native performance powered by **libmpv**.
+- **Universal Format Support**: Plays MP4, MKV, AVI, HEVC, and more.
+- **Smart Resume**: Remembers where you left off. History resets automatically when you finish a video.
+- **Always On Top**: Keep the player visible while working.
+- **Classic Experience**: A fast, lightweight, and distraction-free interface.
+
+### ✂️ Cutter
+Extract highlights instantly without quality loss.
+- **Lossless Export**: Cuts video segments using **Stream Copy** mode (no re-encoding).
+- **Easy Controls**: Set Start and End points with a single click.
+- **Smart Naming**: Automatically organizes outputs with timestamps and `[cut]` prefixes.
+
+### � Converter (In Development)
+Values stability and simplicity for HLS creation.
+- **HLS Generation**: Convert local videos into HTTP Live Streaming compatible playlists.
 
 ## Technology Stack
 
