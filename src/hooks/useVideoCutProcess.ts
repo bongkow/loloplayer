@@ -38,7 +38,7 @@ export function useVideoCutProcess() {
             const endStr = formatTimeForFFmpeg(endTime).replace(/:/g, '-').replace(/\./g, '_');
             const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
 
-            const defaultName = `${fileName}_${startStr}_${endStr}_${timestamp}.${originalExt}`;
+            const defaultName = `[cut]${fileName}_${startStr}_${endStr}_${timestamp}.${originalExt}`;
 
             const savePath = await save({
                 title: "Save Cut Video As",

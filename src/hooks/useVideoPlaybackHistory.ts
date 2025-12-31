@@ -12,7 +12,7 @@ interface PlaybackHistory {
  * Should be mounted closer to the root (e.g. App.tsx) exactly once.
  */
 export function useRecordPlaybackHistory() {
-    const { videoPath, currentPlaybackTime } = useVideoPlaybackAndConversionStore();
+    const { videoPath, currentPlaybackTime, videoDuration } = useVideoPlaybackAndConversionStore();
 
     useEffect(() => {
         if (!videoPath || currentPlaybackTime === null || currentPlaybackTime === undefined) return;
@@ -26,16 +26,18 @@ export function useRecordPlaybackHistory() {
             console.warn("Failed to parse playback history", e);
         }
 
-        // Only save if significant change (e.g. > 1 sec diff to avoid spamming? localStorage is sync, so be careful).
-        // For simplicity and correctness, we update on change but we can throttle if performance issues arise.
-        // Given React batching, this won't fire 60 times a second likely, but mpv updates time-pos frequently.
-        // Let's rely on the store update rate.
+        // Determine time to save
+        // If within 1 second of the end, reset to 0 so next watch starts from beginning
+        let timeToSave = currentPlaybackTime;
+        if (videoDuration && (videoDuration - currentPlaybackTime) < 1) {
+            timeToSave = 0;
+        }
 
         // Save new time
-        history[videoPath] = currentPlaybackTime;
+        history[videoPath] = timeToSave;
         localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
 
-    }, [videoPath, currentPlaybackTime]);
+    }, [videoPath, currentPlaybackTime, videoDuration]);
 }
 
 /**
