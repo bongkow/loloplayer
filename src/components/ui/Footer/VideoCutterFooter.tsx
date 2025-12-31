@@ -4,7 +4,7 @@ import { useVideoCutProcess, formatTimeForFFmpeg } from "../../../hooks/useVideo
 import ControlsAndProgressBarAtBottom from "./ControlsAndProgressBarAtBottom";
 
 export function VideoCutterFooter() {
-    const { currentPlaybackTime, videoDuration } = useVideoPlaybackAndConversionStore();
+    const { currentPlaybackTime } = useVideoPlaybackAndConversionStore();
     const {
         startTime,
         endTime,
@@ -97,8 +97,8 @@ export function VideoCutterFooter() {
                         onClick={initiateCutProcess}
                         disabled={isProcessing || cutDuration <= 0}
                         className={`flex items-center gap-2 px-5 py-2 rounded font-bold text-sm transition-all shadow-lg ${isProcessing || cutDuration <= 0
-                                ? "bg-zinc-800 text-zinc-500 cursor-not-allowed"
-                                : "bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white shadow-rose-900/20 hover:shadow-rose-900/40 transform hover:scale-105"
+                            ? "bg-zinc-800 text-zinc-500 cursor-not-allowed"
+                            : "bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white shadow-rose-900/20 hover:shadow-rose-900/40 transform hover:scale-105"
                             }`}
                     >
                         {isProcessing ? (
