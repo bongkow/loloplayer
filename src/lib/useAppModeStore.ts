@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type AppMode = "alpha-player" | "hls-converter";
+export type AppMode = "player" | "converter" | "cutter";
 
 interface AppModeState {
     appMode: AppMode;
@@ -14,7 +14,7 @@ interface AppModeState {
  * Separated from video playback state to maintain a clean architecture.
  */
 export const useAppModeStore = create<AppModeState>((set) => ({
-    appMode: "alpha-player",
+    appMode: "player",
     isAlwaysOnTop: false,
     setAppMode: (mode) => set({ appMode: mode }),
     toggleAlwaysOnTop: () => set((state) => ({ isAlwaysOnTop: !state.isAlwaysOnTop })),

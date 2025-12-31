@@ -12,6 +12,7 @@ import { useIdleTimer } from "./hooks/useIdleTimer";
 import LoadStatus from "./components/ui/Footer/LoadStatus";
 import { AlphaPlayerFooter } from "./components/ui/Footer/AlphaPlayerFooter";
 import { HlsConverterFooter } from "./components/ui/Footer/HlsConverterFooter";
+import { VideoCutterFooter } from "./components/ui/Footer/VideoCutterFooter";
 import { AppModeSelector } from "./components/ui/Header/AppModeSelector";
 import { WindowControls } from "./components/ui/Header/WindowControls";
 import { useRecordPlaybackHistory } from "./hooks/useVideoPlaybackHistory";
@@ -79,7 +80,7 @@ function HlsMakerApplication() {
 
   return (
     <div
-      className={`flex flex-col w-full h-full text-zinc-100 font-sans overflow-hidden transition-colors duration-500 group ${videoPath && appMode === 'alpha-player' ? "bg-transparent" : "bg-zinc-950"
+      className={`flex flex-col w-full h-full text-zinc-100 font-sans overflow-hidden transition-colors duration-500 group ${videoPath && (appMode === 'player' || appMode === 'cutter') ? "bg-transparent" : "bg-zinc-950"
         }`}
     >
       <header
@@ -94,8 +95,8 @@ function HlsMakerApplication() {
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col items-center justify-center relative min-h-0">
-        {/* ALPHA PLAYER MODE CONTENT */}
-        {appMode === 'alpha-player' && (
+        {/* PLAYER & CUTTER MODE CONTENT (Shared Video View) */}
+        {(appMode === 'player' || appMode === 'cutter') && (
           <>
             {!isMpvPlayerReady ? (
               <div className="flex flex-col items-center gap-6 animate-in fade-in zoom-in duration-700">
@@ -136,8 +137,8 @@ function HlsMakerApplication() {
           </>
         )}
 
-        {/* HLS CONVERTER MODE CONTENT */}
-        {appMode === 'hls-converter' && (
+        {/* CONVERTER MODE CONTENT */}
+        {appMode === 'converter' && (
           <div className="flex flex-col items-center justify-center h-full w-full bg-zinc-950 text-zinc-400">
             <div className="flex flex-col items-center gap-4 p-8 border border-zinc-900 rounded-2xl bg-zinc-900/50 backdrop-blur-sm">
               <div className="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center mb-2">
@@ -156,15 +157,17 @@ function HlsMakerApplication() {
       </main>
 
       {/* Unified Control & Status Footer */}
-      <footer id="Footer" className={`z-[999] solid-red-footer flex items-center justify-between px-4 border-t border-red-800 select-none min-h-[56px] py-1 transition-opacity duration-500 ${isUserActive ? 'opacity-50' : 'opacity-0'}`}>
+      <footer id="Footer" className={`z-[999] solid-red-footer flex items-center justify-between px-4 border-t border-red-800 select-none min-h-[56px] py-1 transition-opacity duration-500 ${isUserActive ? 'opacity-100' : 'opacity-0'}`}>
         {/* Left: System Status */}
         <LoadStatus isProcessingHls={isProcessingHls} statusMessage={statusMessage} />
 
         {/* Center: Dynamic Footer Controls */}
-        {appMode === 'alpha-player' ? (
+        {appMode === 'player' ? (
           <AlphaPlayerFooter videoPath={videoPath} />
-        ) : (
+        ) : appMode === 'converter' ? (
           <HlsConverterFooter />
+        ) : (
+          <VideoCutterFooter />
         )}
 
         {/* Right: Always On Top Toggle */}
