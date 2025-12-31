@@ -28,6 +28,16 @@ const ChevronDownIcon = ({ className }: { className?: string }) => (
     </svg>
 );
 
+const ScissorsIcon = ({ className }: { className?: string }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="6" cy="6" r="3" />
+        <circle cx="6" cy="18" r="3" />
+        <line x1="20" y1="4" x2="8.12" y2="15.88" />
+        <line x1="14.47" y1="14.48" x2="20" y2="20" />
+        <line x1="8.12" y1="8.12" x2="12" y2="12" />
+    </svg>
+);
+
 interface ModeOption {
     value: AppMode;
     label: string;
@@ -45,14 +55,19 @@ export function AppModeSelector() {
 
     const modes: ModeOption[] = [
         {
-            value: "alpha-player",
+            value: "player",
             label: "player",
             icon: <PlayIcon className="text-emerald-500" />
         },
         {
-            value: "hls-converter",
+            value: "converter",
             label: "converter",
             icon: <SettingsIcon className="text-amber-500" />
+        },
+        {
+            value: "cutter",
+            label: "cutter",
+            icon: <ScissorsIcon className="text-rose-500" />
         },
     ];
 
@@ -66,7 +81,7 @@ export function AppModeSelector() {
                 <DropdownMenuTrigger asChild>
                     <button className="flex items-center gap-3 px-4 h-8 bg-white/5 border border-white/5 hover:border-white/20 hover:bg-white/10 rounded-[2px] transition-all duration-150 group outline-none">
                         <div className="flex flex-col items-start leading-none pointer-events-none">
-                            <span className={`text-[10px] font-mono font-bold uppercase tracking-widest transition-colors ${appMode === 'alpha-player' ? 'text-emerald-400' : 'text-amber-400'}`}>
+                            <span className={`text-[10px] font-mono font-bold uppercase tracking-widest transition-colors ${appMode === 'player' ? 'text-emerald-400' : appMode === 'cutter' ? 'text-rose-400' : 'text-amber-400'}`}>
                                 {currentModeInfo.label}
                             </span>
                         </div>
@@ -92,7 +107,7 @@ export function AppModeSelector() {
                             </div>
                             <span className="font-semibold">{mode.label}</span>
                             {appMode === mode.value && (
-                                <div className={`ml-auto w-1 h-1 rounded-sm ${appMode === 'alpha-player' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(52,211,153,0.5)]' : 'bg-amber-500 shadow-[0_0_8px_rgba(251,191,36,0.5)]'}`} />
+                                <div className={`ml-auto w-1 h-1 rounded-sm ${appMode === 'player' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(52,211,153,0.5)]' : appMode === 'cutter' ? 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.5)]' : 'bg-amber-500 shadow-[0_0_8px_rgba(251,191,36,0.5)]'}`} />
                             )}
                         </DropdownMenuItem>
                     ))}

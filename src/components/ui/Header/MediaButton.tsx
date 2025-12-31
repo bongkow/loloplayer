@@ -89,7 +89,7 @@ export function MediaButton() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56 bg-white/95 backdrop-blur-2xl border-zinc-200 text-zinc-800 shadow-2xl rounded-[2px] mt-2">
                         {/* Alpha Player Specific Menu Items */}
-                        {appMode === 'alpha-player' && (
+                        {appMode === 'player' && (
                             <>
                                 <DropdownMenuItem
                                     onClick={handleInitiateVideoFileSelection}
@@ -104,7 +104,7 @@ export function MediaButton() {
                         )}
 
                         {/* HLS Converter Specific Menu Items */}
-                        {appMode === 'hls-converter' && (
+                        {appMode === 'converter' && (
                             <>
                                 <DropdownMenuItem
                                     onClick={initiateHlsConversionProcess}
