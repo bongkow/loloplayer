@@ -1,6 +1,7 @@
 import { create } from "zustand";
-import { setProperty } from "tauri-plugin-libmpv-api";
+import { setProperty, command } from "tauri-plugin-libmpv-api";
 import { useVideoPlaybackAndConversionStore } from "./useVideoPlaybackAndConversionStore";
+import { useAppModeStore } from "./useAppModeStore";
 
 interface ShortcutState {
     handleKeyDown: (e: KeyboardEvent) => Promise<void>;
@@ -8,28 +9,49 @@ interface ShortcutState {
 
 export const useShortcutStore = create<ShortcutState>(() => ({
     handleKeyDown: async (e: KeyboardEvent) => {
-        // Spacebar: Toggle Play/Pause
-        if (e.code === "Space") {
-            // Prevent default page scrolling behavior
-            e.preventDefault();
+        const { videoPath, isVideoPlaying } = useVideoPlaybackAndConversionStore.getState();
 
-            const { isVideoPlaying, videoPath } = useVideoPlaybackAndConversionStore.getState();
+        // Common check: actions usually require a video to be loaded
+        if (!videoPath) return;
 
-            // Only toggle if a video is actually loaded
-            if (!videoPath) return;
+        switch (e.code) {
+            case "Space":
+                e.preventDefault();
+                try {
+                    // Toggle Pause/Play
+                    const nextPauseState = isVideoPlaying;
+                    await setProperty("pause", nextPauseState);
+                } catch (error) {
+                    console.error("[Shortcut] Error toggling playback:", error);
+                }
+                break;
 
-            try {
-                // If isVideoPlaying is true, we want to PAUSE (set pause=true)
-                // If isVideoPlaying is false, we want to PLAY (set pause=false)
-                const nextPauseState = isVideoPlaying;
-                await setProperty("pause", nextPauseState);
+            case "ArrowLeft":
+                e.preventDefault();
+                try {
+                    // Seek backward 10 seconds
+                    await command("seek", ["-10", "relative"]);
+                } catch (error) {
+                    console.error("[Shortcut] Error seeking backward:", error);
+                }
+                break;
 
-                // Note: We don't need to manually update the store here because
-                // useMpvInitialization.ts has an observer on the "pause" property
-                // which will update the store whenever it changes.
-            } catch (error) {
-                console.error("[Shortcut] Error toggling playback:", error);
-            }
+                try {
+                    // Seek forward 10 seconds
+                    await command("seek", ["10", "relative"]);
+                } catch (error) {
+                    console.error("[Shortcut] Error seeking forward:", error);
+                }
+                break;
+
+            case "KeyT":
+                e.preventDefault();
+                try {
+                    useAppModeStore.getState().toggleAlwaysOnTop();
+                } catch (error) {
+                    console.error("[Shortcut] Error toggling always on top:", error);
+                }
+                break;
         }
     },
 }));

@@ -16,6 +16,7 @@ import { AppModeSelector } from "./components/ui/Header/AppModeSelector";
 import { WindowControls } from "./components/ui/Header/WindowControls";
 import { useRecordPlaybackHistory } from "./hooks/useVideoPlaybackHistory";
 import { useShortcutStore } from "./lib/useShortcutStore";
+import { AlwaysOnTopToggle } from "./components/ui/Footer/AlwaysOnTopToggle";
 import { useEffect } from "react";
 
 /**
@@ -155,7 +156,7 @@ function HlsMakerApplication() {
       </main>
 
       {/* Unified Control & Status Footer */}
-      <footer id="Footer" className={`z-[999] solid-red-footer flex items-center justify-between px-4 border-t border-red-800 select-none min-h-[56px] py-1 transition-opacity duration-500 ${isUserActive ? 'opacity-50' : 'opacity-0'}`}>
+      <footer id="Footer" className={`z-[999] solid-red-footer flex items-center justify-between px-4 border-t border-red-800 select-none min-h-[56px] py-1 transition-opacity duration-500 ${isUserActive ? 'opacity-100' : 'opacity-0'}`}>
         {/* Left: System Status */}
         <LoadStatus isProcessingHls={isProcessingHls} statusMessage={statusMessage} />
 
@@ -166,17 +167,9 @@ function HlsMakerApplication() {
           <HlsConverterFooter />
         )}
 
-        {/* Right: Conversion Status Indicator */}
-        <div className="flex items-center justify-end gap-3 min-w-[150px] text-[10px] font-mono font-bold tracking-tighter">
-          {isProcessingHls && (
-            <div className="flex items-center gap-2 text-amber-500 px-2 py-0.5 bg-amber-500/10 rounded-sm border border-amber-500/20">
-              <span className="inline-block w-1.5 h-1.5 bg-amber-500 rounded-full animate-ping" />
-              HLS CONVERTING
-            </div>
-          )}
-          {!isProcessingHls && videoPath && (
-            <div className="text-white/60">IDLE</div>
-          )}
+        {/* Right: Always On Top Toggle */}
+        <div className="flex items-center justify-end min-w-[150px]">
+          <AlwaysOnTopToggle />
         </div>
       </footer>
     </div>
