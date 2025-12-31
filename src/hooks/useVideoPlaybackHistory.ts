@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useVideoPlaybackAndConversionStore } from '../lib/useVideoPlaybackAndConversionStore';
 
-const STORAGE_KEY = 'hlsMaker_playback_history';
+const STORAGE_KEY = 'loloplayer_playback_history';
 
 interface PlaybackHistory {
     [filePath: string]: number;
