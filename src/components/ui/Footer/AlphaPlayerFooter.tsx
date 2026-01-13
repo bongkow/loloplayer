@@ -6,7 +6,7 @@ interface AlphaPlayerFooterProps {
 
 export const AlphaPlayerFooter = ({ videoPath }: AlphaPlayerFooterProps) => {
     return (
-        <div className="flex-1 flex justify-center max-w-xl">
+        <div className="flex-1 flex justify-center w-full px-8">
             {videoPath && <ControlsAndProgressBarAtBottom />}
         </div>
     );

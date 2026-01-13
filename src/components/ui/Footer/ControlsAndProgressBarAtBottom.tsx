@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { useVideoPlaybackAndConversionStore } from "@/lib/useVideoPlaybackAndConversionStore";
 import { useMpvVideoPlaybackControl } from "@/hooks/useMpvVideoPlaybackControl";
 import { formatTimeDurationToString } from "@/lib/utils";
+import { VolumeControl } from "./VolumeControl";
 
 // Native SVG Icons
 const PlayIcon = ({ className }: { className?: string }) => (
@@ -143,6 +144,9 @@ export const ControlsAndProgressBarAtBottom = () => {
                     {formatTimeDurationToString(videoDuration)}
                 </span>
             </div>
+
+            {/* Volume Control */}
+            <VolumeControl />
         </div>
     );
 };

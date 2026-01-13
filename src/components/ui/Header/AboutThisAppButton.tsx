@@ -38,8 +38,20 @@ export function AboutThisAppButton() {
                         <span>Built with Tauri v2 & React</span>
                         <span>Powered by libmpv</span>
                     </div>
+
+                    <DropdownMenuSeparator className="bg-zinc-100 my-2" />
+
+                    <button
+                        onClick={async () => {
+                            const { open } = await import('@tauri-apps/plugin-shell');
+                            await open('ms-settings:defaultapps');
+                        }}
+                        className="w-full h-8 flex items-center justify-center bg-zinc-900 hover:bg-zinc-800 text-white rounded-[2px] transition-colors font-mono text-[10px] tracking-widest uppercase outline-none"
+                    >
+                        Set as Default App
+                    </button>
                 </DropdownMenuContent>
             </DropdownMenu>
-        </div>
+        </div >
     );
 }
