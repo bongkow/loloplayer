@@ -62,12 +62,26 @@ For detailed platform-specific setup instructions, including how to obtain and c
 
 ## Application Modes
 
+This app is a collection of several sub-applications in one.
+
 ### 🎥 Player
 Experience native performance powered by **libmpv**.
 - **Universal Format Support**: Plays MP4, MKV, AVI, HEVC, and more.
 - **Smart Resume**: Remembers where you left off. History resets automatically when you finish a video.
+- **Volume Control**: Slider, Mute (M), and Volume Up/Down (Arrow Keys).
 - **Always On Top**: Keep the player visible while working.
+- **System Integration**: Registered as a default handler for video files. Supports "Open With" context menu and double-click playback.
+- **Set as Default Player**: Easily configure Windows default app settings via the About menu.
 - **Classic Experience**: A fast, lightweight, and distraction-free interface.
+
+### ⌨️ Keyboard Shortcuts
+| Key | Action |
+|-----|--------|
+| `Space` | Play / Pause |
+| `←` / `→` | Seek ±10 seconds |
+| `↑` / `↓` | Volume Up / Down |
+| `M` | Toggle Mute |
+| `T` | Toggle Always On Top |
 
 ### ✂️ Cutter
 Extract highlights instantly without quality loss.

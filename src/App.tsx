@@ -1,7 +1,6 @@
 import { open as openFileDialog } from "@tauri-apps/plugin-dialog";
-import applicationLogoImage from "./assets/logo0.png";
-
-import { Button } from "@/components/ui/button";
+import applicationLogoImage from "./assets/logo1.png";
+import { getMatches } from "@tauri-apps/plugin-cli";
 import { useVideoPlaybackAndConversionStore } from "./lib/useVideoPlaybackAndConversionStore";
 import { useAppModeStore } from "./lib/useAppModeStore";
 import { useMpvVideoPlaybackControl } from "./hooks/useMpvVideoPlaybackControl";
@@ -44,10 +43,29 @@ function HlsMakerApplication() {
   // Enable playback history recording
   useRecordPlaybackHistory();
 
+
+
+  // ... existing imports ...
+
   // Global Shortcut Listener
   useEffect(() => {
     const handleGlobalKeyDown = useShortcutStore.getState().handleKeyDown;
     window.addEventListener("keydown", handleGlobalKeyDown);
+
+    // Check for CLI args (File Association)
+    const checkCliArgs = async () => {
+      try {
+        const matches = await getMatches();
+        if (matches.args.file && matches.args.file.value) {
+          const filePath = matches.args.file.value as string;
+          await loadVideoFileIntoPlayer(filePath);
+        }
+      } catch (e) {
+        console.error("Failed to parse CLI args:", e);
+      }
+    };
+    checkCliArgs();
+
     return () => {
       window.removeEventListener("keydown", handleGlobalKeyDown);
     };
@@ -109,26 +127,18 @@ function HlsMakerApplication() {
                 <p className="text-zinc-500 text-xs font-medium tracking-widest uppercase">Initializing System</p>
               </div>
             ) : !videoPath ? (
-              <div className="flex flex-col items-center gap-8 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-                <div className="group relative cursor-pointer" onClick={initiateVideoFileSelectionProcess}>
-                  <div className="absolute -inset-4 bg-zinc-800/20 rounded-full blur-3xl group-hover:bg-zinc-500/10 transition-colors duration-500" />
+              <div
+                onClick={initiateVideoFileSelectionProcess}
+                className="flex flex-col items-center justify-center gap-0 cursor-pointer group animate-in fade-in slide-in-from-bottom-8 duration-1000"
+              >
+                <div className="relative w-64 h-64 flex items-center justify-center">
                   <img
                     src={applicationLogoImage}
                     alt="loloplayer Logo"
-                    className="w-40 h-40 object-contain relative transition-transform duration-500 group-hover:scale-105"
-                    style={{ filter: "drop-shadow(0 0 20px rgba(0,0,0,0.5))" }}
+                    className="w-full h-full object-contain relative transition-transform duration-500 group-hover:scale-105 opacity-80 mix-blend-screen"
                   />
                 </div>
-                <div className="flex flex-col items-center gap-2">
-                  <p className="text-zinc-400 text-sm font-medium">No video source loaded</p>
-                  <Button
-                    variant="outline"
-                    className="h-8 border-zinc-800 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-all font-normal text-xs"
-                    onClick={initiateVideoFileSelectionProcess}
-                  >
-                    Select Media
-                  </Button>
-                </div>
+                <div className="text-zinc-500 text-lg font-bold tracking-widest uppercase transition-colors duration-300 group-hover:text-zinc-300 font-['Orbitron']">loloplayer</div>
               </div>
             ) : (
               /* Native mpv playback visible through transparency. */
@@ -157,7 +167,7 @@ function HlsMakerApplication() {
       </main>
 
       {/* Unified Control & Status Footer */}
-      <footer id="Footer" className={`z-[999] solid-red-footer flex items-center justify-between px-4 border-t border-red-800 select-none min-h-[56px] py-1 transition-opacity duration-500 ${isUserActive ? 'opacity-100' : 'opacity-0'}`}>
+      <footer id="Footer" className={`z-[999] solid-black-footer flex items-center justify-between px-4 border-t border-red-800 select-none min-h-[56px] py-1 transition-opacity duration-500 ${isUserActive ? 'opacity-100' : 'opacity-0'}`}>
         {/* Left: System Status */}
         <LoadStatus isProcessingHls={isProcessingHls} statusMessage={statusMessage} />
 

@@ -1,5 +1,4 @@
 import { open as openFileDialog } from "@tauri-apps/plugin-dialog";
-import { getCurrentWindow } from "@tauri-apps/api/window";
 
 import {
     DropdownMenu,
@@ -31,12 +30,6 @@ const ConvertIcon = () => (
     </svg>
 );
 
-const ExitIcon = () => (
-    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M18 6 6 18M6 6l12 12" />
-    </svg>
-);
-
 /**
  * MenuBarAtTop Component
  * 
@@ -49,8 +42,6 @@ export function MediaButton() {
     const { appMode } = useAppModeStore();
     const { loadVideoFileIntoPlayer } = useMpvVideoPlaybackControl();
     const { initiateHlsConversionProcess } = useHlsMediaConversionProcess();
-    const currentTauriWindow = getCurrentWindow();
-
     /**
      * Opens a file dialog to select a video file and triggers the loading process.
      * This logic is local to the menu bar as it's a direct user interaction point.
@@ -117,17 +108,6 @@ export function MediaButton() {
                                 <DropdownMenuSeparator className="bg-zinc-100" />
                             </>
                         )}
-
-                        <DropdownMenuItem
-                            onClick={() => currentTauriWindow.close()}
-                            className="DropdownMenuItem flex items-center gap-2 text-xs focus:bg-red-50 text-red-600 focus:text-red-700 cursor-pointer py-2 font-mono tracking-wide rounded-[1px]"
-                        >
-                            <div className="text-red-500">
-                                <ExitIcon />
-                            </div>
-                            <span className="font-medium">Exit</span>
-                            <DropdownMenuShortcut className="ml-auto opacity-50 text-[10px]">Alt+F4</DropdownMenuShortcut>
-                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
