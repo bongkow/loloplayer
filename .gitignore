@@ -35,3 +35,11 @@ src-tauri/binaries/ffmpeg-aarch64-apple-darwin
 # Temporary files
 ffmpeg.zip
 temp_ffmpeg/
+
+# Build output / logs
+build_log.txt
+tsc_errors.txt
+tsc_output.txt
+convert.ps1
+*.bak
+tmp_diff_msg.txt
