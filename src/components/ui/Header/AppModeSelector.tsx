@@ -38,6 +38,17 @@ const ScissorsIcon = ({ className }: { className?: string }) => (
     </svg>
 );
 
+const WaveformIcon = ({ className }: { className?: string }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M2 10v3" />
+        <path d="M6 6v11" />
+        <path d="M10 3v18" />
+        <path d="M14 8v7" />
+        <path d="M18 5v13" />
+        <path d="M22 10v3" />
+    </svg>
+);
+
 interface ModeOption {
     value: AppMode;
     label: string;
@@ -69,6 +80,11 @@ export function AppModeSelector() {
             label: "cutter",
             icon: <ScissorsIcon className="text-rose-500" />
         },
+        {
+            value: "rally",
+            label: "rally",
+            icon: <WaveformIcon className="text-cyan-500" />
+        },
     ];
 
     const currentModeInfo = modes.find(m => m.value === appMode) || modes[0];
@@ -81,7 +97,7 @@ export function AppModeSelector() {
                 <DropdownMenuTrigger asChild>
                     <button className="flex items-center gap-3 px-4 h-8 bg-white/5 border border-white/5 hover:border-white/20 hover:bg-white/10 rounded-[2px] transition-all duration-150 group outline-none">
                         <div className="flex flex-col items-start leading-none pointer-events-none">
-                            <span className={`text-[10px] font-mono font-bold uppercase tracking-widest transition-colors ${appMode === 'player' ? 'text-emerald-400' : appMode === 'cutter' ? 'text-rose-400' : 'text-amber-400'}`}>
+                            <span className={`text-[10px] font-mono font-bold uppercase tracking-widest transition-colors ${appMode === 'player' ? 'text-emerald-400' : appMode === 'cutter' ? 'text-rose-400' : appMode === 'rally' ? 'text-cyan-400' : 'text-amber-400'}`}>
                                 {currentModeInfo.label}
                             </span>
                         </div>
@@ -107,7 +123,7 @@ export function AppModeSelector() {
                             </div>
                             <span className="font-semibold">{mode.label}</span>
                             {appMode === mode.value && (
-                                <div className={`ml-auto w-1 h-1 rounded-sm ${appMode === 'player' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(52,211,153,0.5)]' : appMode === 'cutter' ? 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.5)]' : 'bg-amber-500 shadow-[0_0_8px_rgba(251,191,36,0.5)]'}`} />
+                                <div className={`ml-auto w-1 h-1 rounded-sm ${appMode === 'player' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(52,211,153,0.5)]' : appMode === 'cutter' ? 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.5)]' : appMode === 'rally' ? 'bg-cyan-500 shadow-[0_0_8px_rgba(34,211,238,0.5)]' : 'bg-amber-500 shadow-[0_0_8px_rgba(251,191,36,0.5)]'}`} />
                             )}
                         </DropdownMenuItem>
                     ))}

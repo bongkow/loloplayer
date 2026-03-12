@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { useVideoPlaybackAndConversionStore } from "@/lib/useVideoPlaybackAndConversionStore";
+import { useRallyStore } from "@/lib/useRallyStore";
 import { useMpvVideoPlaybackControl } from "@/hooks/useMpvVideoPlaybackControl";
 import { formatTimeDurationToString } from "@/lib/utils";
 import { VolumeControl } from "./VolumeControl";
@@ -32,6 +33,8 @@ export const ControlsAndProgressBarAtBottom = () => {
         currentPlaybackTime,
         videoDuration,
     } = useVideoPlaybackAndConversionStore();
+
+    const { rallies } = useRallyStore();
 
     const { toggleVideoPlaybackState, seekToPosition } = useMpvVideoPlaybackControl();
 
@@ -107,9 +110,22 @@ export const ControlsAndProgressBarAtBottom = () => {
             >
                 {/* Background Track - Ensure it has a visible height and background */}
                 <div className="w-full h-1.5 bg-white rounded-full overflow-hidden shadow-inner relative ring-1 ring-zinc-700/50">
+                    {/* Rally Markers */}
+                    {videoDuration && rallies.map((rally, idx) => {
+                        const left = (rally.start_time / videoDuration) * 100;
+                        const width = Math.max(0.3, ((rally.end_time - rally.start_time) / videoDuration) * 100);
+                        return (
+                            <div
+                                key={idx}
+                                className="absolute top-0 h-full bg-emerald-400/50 z-[1]"
+                                style={{ left: `${left}%`, width: `${width}%` }}
+                                title={`Rally ${idx + 1}: ${rally.hit_count} hits`}
+                            />
+                        );
+                    })}
                     {/* Fill Line */}
                     <div
-                        className="absolute top-0 left-0 h-full bg-red-600 transition-all duration-150 ease-out shadow-[0_0_15px_rgba(220,38,38,0.6)]"
+                        className="absolute top-0 left-0 h-full bg-red-600 transition-all duration-150 ease-out shadow-[0_0_15px_rgba(220,38,38,0.6)] z-[2]"
                         style={{ width: `${progressPercentage}%` }}
                     />
                 </div>

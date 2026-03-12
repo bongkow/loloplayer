@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type AppMode = "player" | "converter" | "cutter";
+export type AppMode = "player" | "converter" | "cutter" | "rally";
 
 interface AppModeState {
     appMode: AppMode;
