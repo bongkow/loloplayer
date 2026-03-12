@@ -1,6 +1,6 @@
 use serde::Serialize;
 use std::process::Command;
-use tauri::Manager;
+use tauri::{Emitter, Manager};
 
 /// A detected rally segment with start/end times and hit count.
 #[derive(Debug, Clone, Serialize)]
@@ -43,9 +43,9 @@ impl Default for DetectionParams {
     fn default() -> Self {
         Self {
             sample_rate: 8000,
-            window_size: 400,  // 50ms at 8kHz
-            hop_size: 160,     // 20ms hop
-            avg_window: 25,    // ~500ms moving average
+            window_size: 400, // 50ms at 8kHz
+            hop_size: 160,    // 20ms hop
+            avg_window: 25,   // ~500ms moving average
             threshold_factor: 3.0,
             min_energy: 0.001,
             min_transient_gap: 0.15,
@@ -70,11 +70,7 @@ fn extract_audio(
     // Try sidecar path first, fall back to system ffmpeg
     let ffmpeg_bin = if let Some(ref p) = ffmpeg_path {
         // Tauri sidecars get a platform suffix, try common variants
-        let candidates = vec![
-            p.clone(),
-            p.with_extension("exe"),
-            p.with_extension(""),
-        ];
+        let candidates = vec![p.clone(), p.with_extension("exe"), p.with_extension("")];
         candidates
             .into_iter()
             .find(|c| c.exists())
@@ -88,16 +84,16 @@ fn extract_audio(
         .args([
             "-i",
             video_path,
-            "-vn",           // no video
+            "-vn", // no video
             "-ac",
-            "1",             // mono
+            "1", // mono
             "-ar",
             &sample_rate.to_string(),
             "-f",
-            "f32le",         // raw 32-bit float little-endian
+            "f32le", // raw 32-bit float little-endian
             "-acodec",
             "pcm_f32le",
-            "-",             // output to stdout
+            "-", // output to stdout
         ])
         .stdout(std::process::Stdio::piped())
         .stderr(std::process::Stdio::piped())
@@ -258,14 +254,38 @@ pub async fn detect_rallies(
         }
 
         // Step 1: Extract audio
+        let _ = app_handle.emit("rally-detection-progress", "Extracting audio from video...");
         let samples = extract_audio(&app_handle, &video_path, params.sample_rate)?;
+        let duration_secs = samples.len() as f64 / params.sample_rate as f64;
+        let _ = app_handle.emit(
+            "rally-detection-progress",
+            format!(
+                "Audio extracted ({:.0}s). Analyzing transients...",
+                duration_secs
+            ),
+        );
 
         // Step 2: Detect transients (ball impacts)
         let transients = detect_transients(&samples, &params);
+        let _ = app_handle.emit(
+            "rally-detection-progress",
+            format!(
+                "Found {} transients. Clustering into rallies...",
+                transients.len()
+            ),
+        );
 
         // Step 3: Cluster into rallies
         let rallies = cluster_rallies(&transients, &params);
         let total_hits = transients.len();
+        let _ = app_handle.emit(
+            "rally-detection-progress",
+            format!(
+                "Done! {} rallies detected ({} total hits)",
+                rallies.len(),
+                total_hits
+            ),
+        );
 
         Ok(RallyDetectionResult {
             rallies,

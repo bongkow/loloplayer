@@ -34,7 +34,7 @@ export const ControlsAndProgressBarAtBottom = () => {
         videoDuration,
     } = useVideoPlaybackAndConversionStore();
 
-    const { rallies } = useRallyStore();
+    const { rallies, isReelPreviewActive, bufferTime } = useRallyStore();
 
     const { toggleVideoPlaybackState, seekToPosition } = useMpvVideoPlaybackControl();
 
@@ -123,6 +123,37 @@ export const ControlsAndProgressBarAtBottom = () => {
                             />
                         );
                     })}
+                    {/* Dead Zone Overlays (Reel Preview) */}
+                    {isReelPreviewActive && videoDuration && (() => {
+                        const deadZones: { start: number; end: number }[] = [];
+                        let cursor = 0;
+                        for (const rally of rallies) {
+                            const rallyStart = Math.max(0, rally.start_time - bufferTime);
+                            const rallyEnd = rally.end_time + bufferTime;
+                            if (cursor < rallyStart) {
+                                deadZones.push({ start: cursor, end: rallyStart });
+                            }
+                            cursor = Math.max(cursor, rallyEnd);
+                        }
+                        if (cursor < videoDuration) {
+                            deadZones.push({ start: cursor, end: videoDuration });
+                        }
+                        return deadZones.map((zone, idx) => {
+                            const left = (zone.start / videoDuration) * 100;
+                            const width = ((zone.end - zone.start) / videoDuration) * 100;
+                            return (
+                                <div
+                                    key={`dead-${idx}`}
+                                    className="absolute top-0 h-full z-[3]"
+                                    style={{
+                                        left: `${left}%`,
+                                        width: `${width}%`,
+                                        background: "repeating-linear-gradient(45deg, rgba(239,68,68,0.5), rgba(239,68,68,0.5) 2px, transparent 2px, transparent 6px)",
+                                    }}
+                                />
+                            );
+                        });
+                    })()}
                     {/* Fill Line */}
                     <div
                         className="absolute top-0 left-0 h-full bg-red-600 transition-all duration-150 ease-out shadow-[0_0_15px_rgba(220,38,38,0.6)] z-[2]"

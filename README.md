@@ -89,7 +89,16 @@ Extract highlights instantly without quality loss.
 - **Easy Controls**: Set Start and End points with a single click.
 - **Smart Naming**: Automatically organizes outputs with timestamps and `[cut]` prefixes.
 
-### � Converter (In Development)
+### 🎾 Rally
+Audio-based tennis rally detection and export.
+- **Auto-Detection**: Analyzes audio transients (ball impact sounds) to identify rally segments. Tunable **Sensitivity** and **Max Gap** parameters.
+- **Buffer Time**: Configurable padding (default 0.5s) added before/after each rally for context.
+- **Live Progress**: Real-time status messages during detection (extracting audio → analyzing → clustering).
+- **Rally Navigator**: Jump to any detected rally on the progress bar. Checkboxes for selective export.
+- **Export Selected / All**: Export individual rally clips as separate video files (`originalName_start_end.ext`).
+- **Rally Reel**: Preview non-rally (dead) zones on the progress bar with red stripes, then export all rallies stitched into a single highlight video.
+
+### � Converter (In Development) : will be worked on from v1.1.0. 
 Values stability and simplicity for HLS creation.
 - **HLS Generation**: Convert local videos into HTTP Live Streaming compatible playlists.
 
