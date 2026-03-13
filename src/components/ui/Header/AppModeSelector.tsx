@@ -49,6 +49,14 @@ const WaveformIcon = ({ className }: { className?: string }) => (
     </svg>
 );
 
+const SparklesIcon = ({ className }: { className?: string }) => (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+        <path d="M20 3v4" />
+        <path d="M22 5h-4" />
+    </svg>
+);
+
 interface ModeOption {
     value: AppMode;
     label: string;
@@ -85,6 +93,11 @@ export function AppModeSelector() {
             label: "rally",
             icon: <WaveformIcon className="text-cyan-500" />
         },
+        {
+            value: "edit",
+            label: "edit",
+            icon: <SparklesIcon className="text-violet-500" />
+        },
     ];
 
     const currentModeInfo = modes.find(m => m.value === appMode) || modes[0];
@@ -97,7 +110,7 @@ export function AppModeSelector() {
                 <DropdownMenuTrigger asChild>
                     <button className="flex items-center gap-3 px-4 h-8 bg-white/5 border border-white/5 hover:border-white/20 hover:bg-white/10 rounded-[2px] transition-all duration-150 group outline-none">
                         <div className="flex flex-col items-start leading-none pointer-events-none">
-                            <span className={`text-[10px] font-mono font-bold uppercase tracking-widest transition-colors ${appMode === 'player' ? 'text-emerald-400' : appMode === 'cutter' ? 'text-rose-400' : appMode === 'rally' ? 'text-cyan-400' : 'text-amber-400'}`}>
+                            <span className={`text-[10px] font-mono font-bold uppercase tracking-widest transition-colors ${appMode === 'player' ? 'text-emerald-400' : appMode === 'cutter' ? 'text-rose-400' : appMode === 'rally' ? 'text-cyan-400' : appMode === 'edit' ? 'text-violet-400' : 'text-amber-400'}`}>
                                 {currentModeInfo.label}
                             </span>
                         </div>
@@ -123,7 +136,7 @@ export function AppModeSelector() {
                             </div>
                             <span className="font-semibold">{mode.label}</span>
                             {appMode === mode.value && (
-                                <div className={`ml-auto w-1 h-1 rounded-sm ${appMode === 'player' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(52,211,153,0.5)]' : appMode === 'cutter' ? 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.5)]' : appMode === 'rally' ? 'bg-cyan-500 shadow-[0_0_8px_rgba(34,211,238,0.5)]' : 'bg-amber-500 shadow-[0_0_8px_rgba(251,191,36,0.5)]'}`} />
+                                <div className={`ml-auto w-1 h-1 rounded-sm ${appMode === 'player' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(52,211,153,0.5)]' : appMode === 'cutter' ? 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.5)]' : appMode === 'rally' ? 'bg-cyan-500 shadow-[0_0_8px_rgba(34,211,238,0.5)]' : appMode === 'edit' ? 'bg-violet-500 shadow-[0_0_8px_rgba(139,92,246,0.5)]' : 'bg-amber-500 shadow-[0_0_8px_rgba(251,191,36,0.5)]'}`} />
                             )}
                         </DropdownMenuItem>
                     ))}

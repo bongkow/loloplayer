@@ -13,6 +13,7 @@ import { AlphaPlayerFooter } from "./components/ui/Footer/AlphaPlayerFooter";
 import { HlsConverterFooter } from "./components/ui/Footer/HlsConverterFooter";
 import { VideoCutterFooter } from "./components/ui/Footer/VideoCutterFooter";
 import { RallyDetectorFooter } from "./components/ui/Footer/RallyDetectorFooter";
+import { EditFooter } from "./components/ui/Footer/EditFooter";
 import { AppModeSelector } from "./components/ui/Header/AppModeSelector";
 import { WindowControls } from "./components/ui/Header/WindowControls";
 import { useRecordPlaybackHistory } from "./hooks/useVideoPlaybackHistory";
@@ -99,7 +100,7 @@ function HlsMakerApplication() {
 
   return (
     <div
-      className={`flex flex-col w-full h-full text-zinc-100 font-sans overflow-hidden transition-colors duration-500 group ${videoPath && (appMode === 'player' || appMode === 'cutter' || appMode === 'rally') ? "bg-transparent" : "bg-zinc-950"
+      className={`flex flex-col w-full h-full text-zinc-100 font-sans overflow-hidden transition-colors duration-500 group ${videoPath && (appMode === 'player' || appMode === 'cutter' || appMode === 'rally' || appMode === 'edit') ? "bg-transparent" : "bg-zinc-950"
         }`}
     >
       <header
@@ -115,7 +116,7 @@ function HlsMakerApplication() {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col items-center justify-center relative min-h-0">
         {/* PLAYER & CUTTER MODE CONTENT (Shared Video View) */}
-        {(appMode === 'player' || appMode === 'cutter' || appMode === 'rally') && (
+        {(appMode === 'player' || appMode === 'cutter' || appMode === 'rally' || appMode === 'edit') && (
           <>
             {!isMpvPlayerReady ? (
               <div className="flex flex-col items-center gap-6 animate-in fade-in zoom-in duration-700">
@@ -179,6 +180,8 @@ function HlsMakerApplication() {
           <HlsConverterFooter />
         ) : appMode === 'rally' ? (
           <RallyDetectorFooter />
+        ) : appMode === 'edit' ? (
+          <EditFooter />
         ) : (
           <VideoCutterFooter />
         )}
