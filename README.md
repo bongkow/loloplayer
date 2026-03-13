@@ -1,4 +1,4 @@
-# HLS Maker
+# loloplayer
 
 A cross-platform desktop video player built with Tauri v2, React, and TypeScript. Features native video playback with libmpv and HLS (HTTP Live Streaming) generation capabilities.
 
